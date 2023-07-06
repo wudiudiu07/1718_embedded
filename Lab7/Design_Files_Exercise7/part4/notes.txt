@@ -1,0 +1,56 @@
+SINGLE_TAP bit is set when a single acceleration event
+that is greater than the value in the THRESH_TAP register
+(Address 0x1D) occurs for less time than is specified in the
+DUR register (Address 0x21)
+
+DOUBLE_TAP bit is set when two acceleration events
+that are greater than the value in the THRESH_TAP register
+(Address 0x1D) occur for less time than is specified in the DUR
+register (Address 0x21),
+second tap starting after the
+time specified by the latent register (Address 0x22) but within
+the time specified in the window register (Address 0x23).
+
+Register 0x1D—THRESH_TAP (Read/Write)
+- 8bit unsigned, with scale factor 62.5 mg/LSB (that is, 0xFF = 16 g)
+- tap detection threshold (amount of tap)
+
+Register 0x21—DUR (Read/Write)
+- 8bits unsigned time value 
+- maximum time that an event must be above the THRESH_TAP threshold to qualify as a tap event
+- scale factor 625microsec/LSB
+- maximum tap duration time
+
+Register 0x22—Latent (Read/Write)
+- 8bits unsigned time value 
+- representing the wait time from the detection of a tap event to the start of the time window, during which a possible second tap event can be detected
+- scale factor is 1.25 ms/LSB.
+- tap latency time is defined by the latent register
+- waiting period from the end of the first tap until the start of the time window (window reg), when a second tap can be detected,
+
+Register 0x23—Window (Read/Write)
+- 8bits unsigned time value 
+- representing the amount of time after the expiration of the latency time (determined by the latent register) during which a second valid tap can begin.
+- scale factor is 1.25 ms/LSB
+- interval after the latency time (set by the latent register) is defined by the window register
+- second tap must begin after the latency time has expired, it need not finish before the end of the time defined by the window register
+
+Register 0x2A—TAP_AXES (Read/Write)
+- Setting the suppress bit suppresses double tap detection if acceleration greater than the value in THRESH_TAP is present between taps
+- A setting of 1 in the TAP_X enable, TAP_Y enable, or TAP_Z enable bit enables x-, y-, or z-axis participation in tap detection
+
+Register 0x2E—INT_ENABLE (Read/Write)
+- Setting bits in this register to a value of 1 enables their respective functions to generate interrupts
+D7 D6 D5 D4
+DATA_READY  SINGLE_TAP  DOUBLE_TAP  Activity 
+D3  D2  D1  D0 
+Inactivity  FREE_FALL  Watermark  Overrun 
+
+Register 0x30—INT_SOURCE (Read Only)
+- Bits set to 1 in this register indicate that their respective functions have triggered an event,
+- DATA_READY, watermark, and overrun bits are always set if the corresponding events occur, regardless of the INT_ENABLE register settings, and are cleared by reading data from the DATAX, DATAY, and DATAZ registers
+- Other bits, and the corresponding interrupts, are cleared by reading the INT_SOURCE register
+
+
+
+Data registers in 2's complement -> how handle?
