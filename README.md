@@ -1,2 +1,2 @@
-# ECE_1718_Embedded
+# Digital Piano
 UofT Embedded Class
