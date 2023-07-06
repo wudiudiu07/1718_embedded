@@ -1,2 +1,0 @@
-Corey Kirschbaum
-Zishu Wu
